@@ -1,0 +1,469 @@
+{
+ "repo": "kiheon-jang/hdel-guardrails-demo-flow-inspection",
+ "synced_at": "2026-11-03 10:05",
+ "prs": [
+  {
+   "additions": 41,
+   "body": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\n점검 결과를 장치 · 항목 · 결과 3열 CSV로 내보내는 기능 추가\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n현장 보고서 작성용\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n추가\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\ndart test — 10건 통과 (CSV 변환 테스트 1건 추가)\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [x] 사용함 — 도구: Claude Code / 범위: 코드 · 테스트 / 정도: 상당 부분\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n| lib/export/report_export.dart | AI 생성 |\n| test/export_test.dart | AI 생성 |\n| pubspec.yaml | AI 생성 후 수정 |\n| docs/HISTORY.md | AI 생성 |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가: exportCsv 가 머리글 1줄과 결과마다 장치 · 항목 · 정상/이상 1줄을 만들어 csv 패키지로 변환\n- 우려되는 문제점은 무엇인가: 엑셀 기본 인코딩에서 한글이 깨질 수 있음\n- 왜 이 방식을 골랐는가 (검토한 대안): 따옴표 · 쉼표가 든 값 처리를 직접 짜는 것보다 검증된 패키지가 안전\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\n새 패키지 csv — pub.dev 공개 패키지. 따옴표 · 줄바꿈 처리 규칙을 직접 구현하지 않으려고\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n보통 — 이전 버전 배포\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n해당 없음\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n엑셀에서 열 때 한글이 깨지면 BOM 추가 필요 (확인 필요)\n",
+   "createdAt": "2026-11-03T01:04:00Z",
+   "deletions": 4,
+   "files": [
+    {
+     "path": "docs/HANDOVER.md",
+     "additions": 9,
+     "deletions": 4,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HISTORY.md",
+     "additions": 8,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "lib/export/report_export.dart",
+     "additions": 14,
+     "deletions": 0,
+     "changeType": "ADDED"
+    },
+    {
+     "path": "pubspec.yaml",
+     "additions": 1,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "test/export_test.dart",
+     "additions": 9,
+     "deletions": 0,
+     "changeType": "ADDED"
+    }
+   ],
+   "headRefName": "feature/export-csv",
+   "mergedAt": "2026-11-03T01:05:34Z",
+   "number": 6,
+   "state": "MERGED",
+   "title": "점검 결과 CSV 내보내기",
+   "owner": "확인 필요",
+   "version": "다음 버전"
+  },
+  {
+   "additions": 165,
+   "body": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\nPR마다 자동 검사(.github/workflows/governance-check.yml)와 기준 문서(docs/확인필요항목_기준.md) 추가\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n문서 기반에서는 이해 확인 · 필수 항목을 비워도 병합할 수 있었음. 사이트 기반으로 전환\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n추가\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\n자동 검사가 이 PR에서 실행됨 · dart test 9건 통과\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [x] 사용함 — 도구: Claude Code / 범위: 설정 · 문서 / 정도: 대부분\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n| .github/workflows/governance-check.yml | AI 생성 후 수정 |\n| docs/확인필요항목_기준.md | AI 생성 |\n| docs/HISTORY.md | AI 생성 |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가: PR이 열리거나 본문 · 커밋이 바뀌면 워크플로가 PR 본문 칸과 바뀐 파일을 검사하고, 하나라도 실패하면 검사 실패\n- 우려되는 문제점은 무엇인가: 기준이 너무 엄격하면 형식만 채우는 입력이 늘 수 있음\n- 왜 이 방식을 골랐는가 (검토한 대안): 도구 추가 없이 GitHub Actions만으로 시작할 수 있어서\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\nCI 설정 추가 — 자동 검사 도입이 목적\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n낮음 — 워크플로 파일을 지우면 문서 기반으로 돌아감\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n해당 없음\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n검사 기준을 바꾸면 기준 문서도 함께 고침\n",
+   "createdAt": "2026-11-03T01:03:04Z",
+   "deletions": 2,
+   "files": [
+    {
+     "path": ".github/workflows/governance-check.yml",
+     "additions": 115,
+     "deletions": 0,
+     "changeType": "ADDED"
+    },
+    {
+     "path": "docs/HANDOVER.md",
+     "additions": 4,
+     "deletions": 2,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HISTORY.md",
+     "additions": 8,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/확인필요항목_기준.md",
+     "additions": 38,
+     "deletions": 0,
+     "changeType": "ADDED"
+    }
+   ],
+   "headRefName": "feature/governance-check",
+   "mergedAt": "2026-11-03T01:03:50Z",
+   "number": 5,
+   "state": "MERGED",
+   "title": "사이트 기반 전환: 자동 검사 추가",
+   "owner": "확인 필요",
+   "version": "다음 버전"
+  },
+  {
+   "additions": 101,
+   "body": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\n업데이트 시작 전 보드 종류 · 현재 버전을 호환표(assets/fw_compat.json)와 비교해 맞지 않으면 막음\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n구형 보드에 맞지 않는 펌웨어가 올라가 오류가 난 사례\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n추가\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\ndart test — 9건 통과 (호환 · 비호환 · 확인 불가 테스트 3건 추가)\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [x] 사용함 — 도구: Claude Code / 범위: 설계 · 코드 · 테스트 / 정도: 상당 부분\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n| lib/fwupdate/compat_check.dart | AI 생성 |\n| lib/fwupdate/fw_update.dart | AI 생성 후 수정 |\n| test/fw_update_test.dart | AI 생성 |\n| assets/fw_compat.json | 직접 작성 |\n| pubspec.yaml | AI 생성 후 수정 |\n| docs/HISTORY.md | AI 생성 |\n| docs/결정기록/0001-호환표-앱-내장.md | AI 생성 |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가: CompatChecker 가 펌웨어 버전으로 호환표를 찾고, 보드 종류별 허용 범위에 현재 보드 버전이 들어가는지 pub_semver 로 판정. 표에 없으면 막고, 보드 버전이 비어 있으면 확인 불가\n- 우려되는 문제점은 무엇인가: 호환표를 갱신하지 않으면 새 펌웨어가 전부 막힘. 구형 보드는 엔지니어 판단(force)에 의존\n- 왜 이 방식을 골랐는가 (검토한 대안): 현장이 오프라인이라 서버 조회 대신 앱 내장. 버전 비교는 직접 구현 대신 공식 패키지\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\n새 패키지 pub_semver — 버전 범위 비교용 Dart 공식 패키지. 직접 구현보다 비교 규칙 오류가 적음\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n높음 — FwUpdater 를 호환표 없이 만들면 기존 흐름으로 동작\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n- 배경: 오프라인 현장이 많아 서버 조회가 어려움\n- 결정: 호환표를 앱에 내장 (docs/결정기록/0001-호환표-앱-내장.md)\n- 검토한 대안: 서버 조회 — 오프라인에서 동작하지 않아 제외\n- 영향: 새 보드 · 펌웨어 출시 때 fw_compat.json 수동 갱신\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n새 보드 · 펌웨어 출시 시 fw_compat.json 범위를 추가해야 함. 빠뜨리면 업데이트가 막힘\n",
+   "createdAt": "2026-11-03T01:02:37Z",
+   "deletions": 7,
+   "files": [
+    {
+     "path": "assets/fw_compat.json",
+     "additions": 3,
+     "deletions": 0,
+     "changeType": "ADDED"
+    },
+    {
+     "path": "docs/HANDOVER.md",
+     "additions": 14,
+     "deletions": 5,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HISTORY.md",
+     "additions": 9,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/결정기록/0001-호환표-앱-내장.md",
+     "additions": 16,
+     "deletions": 0,
+     "changeType": "ADDED"
+    },
+    {
+     "path": "lib/fwupdate/compat_check.dart",
+     "additions": 26,
+     "deletions": 0,
+     "changeType": "ADDED"
+    },
+    {
+     "path": "lib/fwupdate/fw_update.dart",
+     "additions": 13,
+     "deletions": 2,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "pubspec.yaml",
+     "additions": 3,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "test/fw_update_test.dart",
+     "additions": 17,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    }
+   ],
+   "headRefName": "feature/fw-compat-check",
+   "mergedAt": "2026-11-03T01:02:40Z",
+   "number": 4,
+   "state": "MERGED",
+   "title": "펌웨어 업데이트 전 호환성 사전 검사",
+   "owner": "확인 필요",
+   "version": "다음 버전"
+  },
+  {
+   "additions": 27,
+   "body": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\n장치 이름을 영문 · 숫자 · - _ 만, 16바이트 이하로 제한\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n한글 · 특수문자 · 긴 이름을 넣으면 장비가 이름을 잘라 저장함\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n수정\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\ndart test — 6건 통과 (검증 테스트 1건 추가)\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [x] 사용함 — 도구: Claude Code / 범위: 코드 · 테스트 / 정도: 상당 부분\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n| lib/device/device_name.dart | AI 생성 |\n| test/device_test.dart | AI 생성 |\n| docs/HISTORY.md | AI 생성 |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가: rename 이 정규식으로 허용 문자를 보고, UTF-8 바이트 수가 16을 넘으면 ArgumentError\n- 우려되는 문제점은 무엇인가: 이미 한글 이름인 장치는 다음에 바꿀 때 현장에서 막힐 수 있음\n- 왜 이 방식을 골랐는가 (검토한 대안): 장비 쪽 제한을 바꿀 수 없어 앱에서 막는 방식을 고름\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\n없음\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n보통 — 기존에 한글로 저장된 이름은 그대로 두고, 바꿀 때만 검증. 이전 버전 배포로 되돌림\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n해당 없음\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n기존 한글 이름 장치는 이름을 바꿀 때 영문으로 다시 정해야 함\n",
+   "createdAt": "2026-11-03T01:02:23Z",
+   "deletions": 5,
+   "files": [
+    {
+     "path": "docs/HANDOVER.md",
+     "additions": 8,
+     "deletions": 5,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HISTORY.md",
+     "additions": 7,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "lib/device/device_name.dart",
+     "additions": 7,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "test/device_test.dart",
+     "additions": 5,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    }
+   ],
+   "headRefName": "feature/device-name-check",
+   "mergedAt": "2026-11-03T01:02:27Z",
+   "number": 3,
+   "state": "MERGED",
+   "title": "장치 이름 입력 검증",
+   "owner": "확인 필요",
+   "version": "다음 버전"
+  },
+  {
+   "additions": 28,
+   "body": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\n로그 저장 한도(기본 1000건)를 넘으면 가장 오래된 로그부터 지우고 저장\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n현장 신고: 로그가 계속 쌓여 저장 공간이 부족하면 쓰기에서 멈춤. 먼저 병합하고 이해 확인은 병합 뒤 작성\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n긴급\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\ndart test — 5건 통과 (한도 초과 테스트 1건 추가)\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [x] 사용함 — 도구: Claude Code / 범위: 코드 · 테스트 / 정도: 일부\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n| lib/log/log_store.dart | AI 생성 후 수정 |\n| test/log_store_test.dart | AI 생성 |\n| docs/HISTORY.md | AI 생성 |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가: write 가 저장 전에 건수를 보고 한도 이상이면 맨 앞(가장 오래된) 로그를 지운 뒤 저장\n- 우려되는 문제점은 무엇인가: 한도에 걸리면 오래된 로그가 보관 기간 전에 지워질 수 있음\n- 왜 이 방식을 골랐는가 (검토한 대안): 저장 공간을 직접 재는 것보다 건수 한도가 단순하고 현장 단말마다 차이가 적음\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\n없음\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n보통 — 이전 버전 배포로 되돌림\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n해당 없음\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n저장 공간 부족의 원인 재현 테스트는 아직 없음 (확인 필요)\n",
+   "createdAt": "2026-11-03T01:02:09Z",
+   "deletions": 9,
+   "files": [
+    {
+     "path": "docs/HANDOVER.md",
+     "additions": 10,
+     "deletions": 8,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HISTORY.md",
+     "additions": 9,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "lib/log/log_store.dart",
+     "additions": 4,
+     "deletions": 1,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "test/log_store_test.dart",
+     "additions": 5,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    }
+   ],
+   "headRefName": "hotfix/log-write-fail",
+   "mergedAt": "2026-11-03T01:02:12Z",
+   "number": 2,
+   "state": "MERGED",
+   "title": "[긴급] 로그 저장 실패 처리",
+   "owner": "확인 필요",
+   "version": "다음 버전"
+  },
+  {
+   "additions": 68,
+   "body": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\n로그 보관 기간을 코드 고정값(30일)에서 assets/config.json 의 log_keep_days 로 옮김\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n현장마다 보관 기간을 다르게 운영해야 하는데 코드를 고쳐야만 바꿀 수 있었음\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n변경\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\ndart test — 4건 통과 (설정값 읽기 테스트 1건 추가)\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [x] 사용함 — 도구: Claude Code / 범위: 코드 · 테스트 / 정도: 일부\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n| lib/log/log_store.dart | AI 생성 후 수정 |\n| test/log_store_test.dart | AI 생성 |\n| assets/config.json | 직접 작성 |\n| docs/HISTORY.md | AI 생성 |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가: LogStore.fromConfig 가 config 의 log_keep_days 를 읽어 keepDays 로 쓰고, cleanup 이 그 기간보다 오래된 로그를 지움\n- 우려되는 문제점은 무엇인가: config.json 에 값을 잘못 넣으면(문자열 등) 기본값 30일로 동작함\n- 왜 이 방식을 골랐는가 (검토한 대안): 현장별 설정은 이미 config.json 을 쓰고 있어 같은 곳에 둠\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\n없음\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n낮음\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n해당 없음\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n보관 기간은 config.json 의 log_keep_days. 값이 없으면 30일\n",
+   "createdAt": "2026-11-03T01:01:56Z",
+   "deletions": 5,
+   "files": [
+    {
+     "path": "assets/config.json",
+     "additions": 2,
+     "deletions": 1,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HANDOVER.md",
+     "additions": 44,
+     "deletions": 2,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "docs/HISTORY.md",
+     "additions": 7,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "lib/log/log_store.dart",
+     "additions": 10,
+     "deletions": 2,
+     "changeType": "MODIFIED"
+    },
+    {
+     "path": "test/log_store_test.dart",
+     "additions": 5,
+     "deletions": 0,
+     "changeType": "MODIFIED"
+    }
+   ],
+   "headRefName": "feature/log-keep-days",
+   "mergedAt": "2026-11-03T01:01:59Z",
+   "number": 1,
+   "state": "MERGED",
+   "title": "로그 보관 기간 설정값화",
+   "owner": "확인 필요",
+   "version": "다음 버전"
+  }
+ ],
+ "checks": [
+  {
+   "conclusion": "success",
+   "createdAt": "2026-11-03T01:04:50Z",
+   "databaseId": 41557323670,
+   "event": "pull_request",
+   "headBranch": "feature/export-csv",
+   "headSha": "ce1123a5fe53ac8107fd9b11f515a94d1ab58d35",
+   "status": "completed",
+   "url": "https://github.com/kiheon-jang/hdel-guardrails-demo-flow-inspection/actions/runs/41557323670",
+   "result": {
+    "pr": 6,
+    "sha": "02f77f6c381b468738365631d8c3216512e0d1e7",
+    "ok": true,
+    "items": [
+     {
+      "key": "required",
+      "name": "필수 항목",
+      "ok": true,
+      "detail": "모두 채워짐"
+     },
+     {
+      "key": "understand",
+      "name": "개발자 이해 확인",
+      "ok": true,
+      "detail": "3문항 작성"
+     },
+     {
+      "key": "signals",
+      "name": "위험 신호 설명",
+      "ok": true,
+      "detail": "외부 패키지 추가 · 설명 있음",
+      "signals": [
+       "외부 패키지 추가"
+      ]
+     },
+     {
+      "key": "secrets",
+      "name": "비밀정보 (gitleaks)",
+      "ok": true,
+      "detail": "탐지 없음"
+     },
+     {
+      "key": "tests",
+      "name": "테스트",
+      "ok": true,
+      "detail": "통과"
+     }
+    ],
+    "files": 5,
+    "lines": 45
+   }
+  },
+  {
+   "conclusion": "failure",
+   "createdAt": "2026-11-03T01:04:03Z",
+   "databaseId": 41557231746,
+   "event": "pull_request",
+   "headBranch": "feature/export-csv",
+   "headSha": "ce1123a5fe53ac8107fd9b11f515a94d1ab58d35",
+   "status": "completed",
+   "url": "https://github.com/kiheon-jang/hdel-guardrails-demo-flow-inspection/actions/runs/41557231746",
+   "result": {
+    "pr": 6,
+    "sha": "02f77f6c381b468738365631d8c3216512e0d1e7",
+    "ok": false,
+    "items": [
+     {
+      "key": "required",
+      "name": "필수 항목",
+      "ok": true,
+      "detail": "모두 채워짐"
+     },
+     {
+      "key": "understand",
+      "name": "개발자 이해 확인",
+      "ok": false,
+      "detail": "비어 있음 3문항 → PR 화면에서 직접 작성"
+     },
+     {
+      "key": "signals",
+      "name": "위험 신호 설명",
+      "ok": true,
+      "detail": "외부 패키지 추가 · 설명 있음",
+      "signals": [
+       "외부 패키지 추가"
+      ]
+     },
+     {
+      "key": "secrets",
+      "name": "비밀정보 (gitleaks)",
+      "ok": true,
+      "detail": "탐지 없음"
+     },
+     {
+      "key": "tests",
+      "name": "테스트",
+      "ok": true,
+      "detail": "통과"
+     }
+    ],
+    "files": 5,
+    "lines": 45
+   }
+  },
+  {
+   "conclusion": "success",
+   "createdAt": "2026-11-03T01:03:09Z",
+   "databaseId": 41557127980,
+   "event": "pull_request",
+   "headBranch": "feature/governance-check",
+   "headSha": "7ec4c4277971c56b4e90900a7bacfade70f577a9",
+   "status": "completed",
+   "url": "https://github.com/kiheon-jang/hdel-guardrails-demo-flow-inspection/actions/runs/41557127980",
+   "result": {
+    "pr": 5,
+    "sha": "32f35107662428d1ed81aaba685a4d8105059d36",
+    "ok": true,
+    "items": [
+     {
+      "key": "required",
+      "name": "필수 항목",
+      "ok": true,
+      "detail": "모두 채워짐"
+     },
+     {
+      "key": "understand",
+      "name": "개발자 이해 확인",
+      "ok": true,
+      "detail": "3문항 작성"
+     },
+     {
+      "key": "signals",
+      "name": "위험 신호 설명",
+      "ok": true,
+      "detail": "CI · 검사 설정 변경 · 설명 있음",
+      "signals": [
+       "CI · 검사 설정 변경"
+      ]
+     },
+     {
+      "key": "secrets",
+      "name": "비밀정보 (gitleaks)",
+      "ok": true,
+      "detail": "탐지 없음"
+     },
+     {
+      "key": "tests",
+      "name": "테스트",
+      "ok": true,
+      "detail": "통과"
+     }
+    ],
+    "files": 4,
+    "lines": 167
+   }
+  }
+ ],
+ "docs": {
+  "docs/HISTORY.md": "<!--\n히스토리 문서 형식 (/hdel-ai-coding:병합요청 · /hdel-ai-coding:병합긴급 이 PR마다 같은 브랜치에서 추가, 개발자 확인)\n- 최신 항목이 위. 제목 바로 아래에 추가한다. 버전은 git 태그로 관리한다\n- PR 본문에서 옮겨 적는다. PR에 없는 내용을 새로 만들지 않는다. 이유를 모르면 \"확인 필요\"\n- 유형: 기능 · 수정 · 긴급 · 보안 · 리팩터링 · 문서\n\n## [유형] <PR 제목> (#번호) · YYYY-MM-DD\n- 담당: <개발자> · AI: <도구 / 정도> · 위험도: <낮음 · 보통 · 높음>\n- 내용과 이유: <무엇을 왜, 관련 이슈>\n- 개발자 설명: <이해 확인의 핵심 로직 · 우려되는 문제점 요약>\n- 바뀐 곳: <폴더 · 주요 파일>\n- 확인 필요 항목: <새 패키지 등과 이유, 없으면 생략>\n- 되돌리는 방법: <위험도 보통 이상일 때>\n- 인계 메모: <다음 사람이 알아야 할 것>\n- 이해 확인: 병합 뒤 작성 (/hdel-ai-coding:병합긴급 일 때만)\n-->\n# 점검관리 툴 히스토리\n\n## [기능] 점검 결과 CSV 내보내기 (#6) · 2026-11-02\n- 담당: 개발자A · AI: Claude Code / 상당 부분 · 위험도: 보통\n- 내용과 이유: 현장 보고서 작성용으로 점검 결과를 CSV로 내보냄\n- 개발자 설명: 결과 목록을 장치 · 항목 · 결과 3열로 바꿔 csv 패키지로 변환\n- 바뀐 곳: lib/export/ · pubspec.yaml\n- 확인 필요 항목: 새 패키지 csv — pub.dev 공개 패키지, 따옴표 · 줄바꿈 처리 규칙을 직접 구현하지 않으려고\n- 되돌리는 방법: 이전 버전 배포\n\n## [문서] 사이트 기반 전환: 자동 검사 추가 (#5) · 2026-11-02\n- 담당: 개발 리더 · AI: Claude Code / 대부분 · 위험도: 낮음\n- 내용과 이유: PR마다 기록 · 위험 신호 · 비밀정보 · 테스트를 자동 검사. 문서 기반에서는 이해 확인을 비워도 병합할 수 있었음\n- 개발자 설명: governance-check.yml 이 PR 본문과 바뀐 파일을 검사하고 결과를 아티팩트로 남김. 기준은 docs/확인필요항목_기준.md\n- 바뀐 곳: .github/workflows/ · docs/확인필요항목_기준.md\n- 확인 필요 항목: CI 설정 추가 — 자동 검사 도입\n- 인계 메모: 검사 기준을 바꾸면 기준 문서도 함께 고침\n\n## [기능] 펌웨어 업데이트 전 호환성 사전 검사 (#4) · 2026-11-02\n- 담당: 개발자A · AI: Claude Code / 상당 부분 · 위험도: 높음\n- 내용과 이유: 업데이트 전 보드 종류 · 현재 버전을 호환표와 비교해 맞지 않으면 막는다. 구형 보드에 맞지 않는 펌웨어가 올라가 오류가 난 사례\n- 개발자 설명: 호환표 범위와 보드 버전을 비교. 버전을 주지 않는 구형 보드는 \"확인 불가\"로 멈추고 엔지니어가 확인 후 진행\n- 바뀐 곳: lib/fwupdate/ · assets/fw_compat.json · pubspec.yaml\n- 확인 필요 항목: 새 패키지 pub_semver — 버전 범위 비교용 Dart 공식 패키지\n- 되돌리는 방법: FwUpdater 를 호환표 없이 만들면 기존 흐름\n- 인계 메모: 새 보드 · 펌웨어 출시 시 fw_compat.json 범위 추가. 결정 기록 0001\n\n## [수정] 장치 이름 입력 검증 (#3) · 2026-11-02\n- 담당: 개발자A · AI: Claude Code / 상당 부분 · 위험도: 보통\n- 내용과 이유: 장치 이름에 한글 · 특수문자를 넣으면 장비가 이름을 잘라 저장\n- 개발자 설명: 영문 · 숫자 · -_ 만 허용, 16바이트 초과 시 저장 막음\n- 바뀐 곳: lib/device/\n- 되돌리는 방법: 이전 버전 배포\n\n## [긴급] 로그 저장 실패 처리 (#2) · 2026-11-02\n- 담당: 개발자B · AI: Claude Code / 일부 · 위험도: 보통\n- 내용과 이유: 로그가 계속 쌓여 저장 공간이 부족하면 쓰기에서 멈춤. 현장 신고로 먼저 배포\n- 개발자 설명: 저장 한도(기본 1000건)를 넘으면 가장 오래된 로그부터 지우고 저장\n- 바뀐 곳: lib/log/log_store.dart\n- 되돌리는 방법: 이전 버전 배포\n- 인계 메모: 원인 재현 테스트는 아직 없음 (확인 필요)\n- 이해 확인: 병합 뒤 작성\n\n## [수정] 로그 보관 기간 설정값화 (#1) · 2026-11-02\n- 담당: 개발자B · AI: Claude Code / 일부 · 위험도: 낮음\n- 내용과 이유: 보관 기간이 코드에 고정돼 현장마다 바꿀 수 없었음\n- 개발자 설명: config.json 의 log_keep_days 를 읽고, 없으면 30일\n- 바뀐 곳: lib/log/ · assets/config.json\n- 인계 메모: 보관 기간은 config.json 의 log_keep_days\n",
+  "docs/HANDOVER.md": "<!--\n인수인계 문서 형식 (/hdel-ai-coding:병합요청 · /hdel-ai-coding:병합긴급 이 PR마다 바뀐 부분만 고침, 개발자 확인 · 보기는 /hdel-ai-coding:인수인계)\n- 근거: 히스토리 문서, 결정 기록, git log 통계, AGENTS.md\n- 내용마다 출처(PR 번호 · 히스토리 · git 통계 · 확인 필요)를 붙인다. 비밀번호 · 키 값은 적지 않는다\n- 확인되지 않은 이유는 지어내지 않고 8번 \"확인 필요 질문\"으로 옮긴다\n\n# <프로젝트> 인수인계 (PR #번호 기준, YYYY-MM-DD)\n## 1. 한눈 요약          | 무엇 | 환경 | 규모(최근 PR 수 · 테스트 수) | 담당(현 담당 · 지원) |\n## 2. 실행 방법          빌드 · 실행 · 테스트 명령, 필요한 장비 · 계정 · 설정 파일 (값은 적지 않음)\n## 3. 주요 기능과 위치   | 기능 | 위치 | 설명 |\n## 4. 구성               | 영역 | 역할 | AI 비중 | 주 작성자 |\n## 5. 가장 많이 바뀐 곳  | 영역 | 변경 횟수 | 관련 PR · 이유 |\n## 6. 관리 포인트        [높음] 작성자 1명 · AI 비중 높은데 이해 확인 1명뿐 · 손으로 갱신하는 설정 / [보통] 테스트 없는 영역 · 외부 패키지 · 이해 확인 병합 뒤 작성 남은 긴급 PR\n## 7. 주요 결정          | 결정 | 이유 | 출처 (PR · 결정 기록) |\n## 8. 미해결 메모 · 확인 필요 질문  | 내용 | 출처 |\n## 9. 인계 체크리스트    - [ ] 빌드 · 테스트 실행 - [ ] 관리 포인트 영역 코드 읽기 - [ ] 핵심 기능 1회 실행 - [ ] 계정 · 권한 이전\n-->\n# 점검관리 툴 인수인계 (PR #6 기준, 2026-11-02)\n\n## 1. 한눈 요약\n| 항목 | 내용 |\n|---|---|\n| 무엇 | 현장 장비 점검 · 설정 · 펌웨어 업데이트 도구 (시연용) · 현장 엔지니어 |\n| 환경 | Dart · 현장 오프라인 사용 |\n| 규모 | PR 6건 · 테스트 10건 |\n| 담당 | 개발자A (현 담당) · 지원 담당 |\n\n## 2. 실행 방법\n- dart pub get → dart test (10건)\n\n## 3. 주요 기능과 위치\n| 기능 | 위치 | 설명 |\n|---|---|---|\n| 점검 로그 | lib/log/ | 보관 기간 · 저장 한도(기본 1000건) |\n| 장치 이름 변경 | lib/device/ | 영문 · 숫자 · 16바이트 제한 |\n| 펌웨어 업데이트 | lib/fwupdate/ | 업데이트 전 호환성 검사 → 진행 |\n| 점검 결과 내보내기 | lib/export/ | CSV (장치 · 항목 · 결과) |\n\n## 4. 구성\n| 영역 | 역할 | AI 비중 | 주 작성자 |\n|---|---|---|---|\n| lib/log/ | 로그 | 일부 | 개발자B |\n| lib/device/ | 장치 이름 | 상당 부분 | 개발자A |\n| lib/fwupdate/ | 업데이트 · 호환성 검사 | 상당 부분 | 개발자A |\n| lib/export/ | 내보내기 | 상당 부분 | 개발자A |\n| assets/ | 설정 · 호환표 | 직접 작성 | 개발자A · 개발자B |\n\n## 5. 가장 많이 바뀐 곳\n| 영역 | 변경 횟수 | 관련 PR |\n|---|---|---|\n| lib/log/ | 2 | #1 · #2 |\n| lib/device/ | 1 | #3 |\n| lib/fwupdate/ | 1 | #4 |\n| .github/workflows/ | 1 | #5 |\n| lib/export/ | 1 | #6 |\n\n## 6. 관리 포인트\n- [높음] 호환표 수동 갱신 — 새 보드 · 펌웨어가 나오면 fw_compat.json 을 사람이 추가해야 하고, 빠뜨리면 업데이트가 막힘 (#4 · 결정 기록 0001)\n- [높음] lib/fwupdate/ — AI 비중 상당 부분, 이해 확인을 쓴 사람이 1명 (#4)\n- [보통] 로그 저장 실패 원인 재현 테스트 없음 (#2)\n- [보통] 외부 패키지 pub_semver 의존 (#4)\n- [보통] 외부 패키지 csv 의존 (#6)\n\n## 7. 주요 결정\n| 결정 | 이유 | 출처 |\n|---|---|---|\n| 로그 보관 기간은 config.json | 현장마다 값이 다름 | #1 |\n| 로그는 건수 한도로 관리 | 저장 공간 측정보다 단순 | #2 |\n| 호환표를 앱에 내장 | 현장 오프라인이라 서버 조회 불가 | #4 · 결정 기록 0001 |\n| PR마다 자동 검사 (사이트 기반 전환) | 이해 확인 · 위험 신호 · 비밀정보 · 테스트를 병합 전에 확인 | #5 |\n\n## 8. 미해결 메모 · 확인 필요 질문\n| 내용 | 출처 |\n|---|---|\n| 로그 저장 공간 부족의 근본 원인 | #2 · 확인 필요 |\n| 기존 한글 이름 장치의 현장 처리 방법 | #3 · 확인 필요 |\n| 새 보드 · 펌웨어 출시 시 fw_compat.json 범위 추가 | #4 |\n| 엑셀에서 한글이 깨지면 BOM 추가 필요 | #6 · 확인 필요 |\n\n## 9. 인계 체크리스트\n- [ ] dart test 10건 실행\n- [ ] 관리 포인트 영역 코드 읽기\n- [ ] 호환 · 비호환 · 버전 없는 보드로 업데이트 1회씩 확인\n",
+  ".github/pull_request_template.md": "<!-- 칸마다 첫 주석이 작성 주체입니다: AI 초안 = AI가 채우고 개발자가 확인, 직접 작성 = 개발자가 직접 -->\n\n## 변경 내용 (요약)\n<!-- AI 초안 · 무엇을 바꿨는지 1~3줄 -->\n\n## 변경 이유 · 목적\n<!-- AI 초안 · 왜 바꿨는지, 관련 이슈 번호. 모르면 확인 필요 -->\n\n## 변경 유형\n<!-- AI 초안 · 추가 / 변경 / 수정 / 삭제 / 폐기 예정 / 보안 / 리팩터링 / 문서 / 긴급 -->\n\n## 테스트 내용\n<!-- AI 초안 · 실행한 테스트와 결과 (비개발 조직: 직접 써 본 결과) -->\n\n## AI 사용\n<!-- AI 초안 -->\n- [ ] 사용하지 않음\n- [ ] 사용함 — 도구: Claude Code / 범위: 설계·코드·테스트·문서 / 정도: 일부·상당 부분·대부분\n\n### 파일별 AI 기여 (AI 사용 시)\n<!-- AI 초안 -->\n| 파일 | AI 생성 / AI 생성 후 수정 / 직접 작성 |\n|---|---|\n|  |  |\n\n### 개발자 이해 확인 (AI 사용 시 필수)\n<!-- 직접 작성 · AI는 비워 둠 -->\n- 핵심 로직은 어떻게 동작하는가:\n- 우려되는 문제점은 무엇인가:\n- 왜 이 방식을 골랐는가 (검토한 대안):\n\n(비개발 조직은 아래 1문항)\n- 어떻게 확인했나:\n\n## 확인 필요 항목 설명 (해당 시)\n<!-- AI 초안 · 테스트 삭제·건너뛰기, CI 설정 변경, 외부 패키지 추가, 대규모 변경, 비밀정보 의심이 있으면 이유 -->\n\n## 위험도와 되돌리는 방법\n<!-- AI 초안 · 낮음 / 보통 / 높음. 보통 이상이면 되돌리는 방법 필수 -->\n\n## 결정 기록 (선택 · 구조 변경 시)\n<!-- AI 초안 · 개발자가 남기기로 한 경우만 -->\n- 배경:\n- 결정:\n- 검토한 대안:\n- 영향:\n\n## 알려진 문제 · 인계 메모\n<!-- AI 초안 · 다음 담당자가 알아야 할 것 -->\n",
+  "docs/확인필요항목_기준.md": "# 확인 필요 항목 기준\n\n사이트 기반으로 전환하면 PR마다 자동 검사(.github/workflows/governance-check.yml)가 아래를 확인합니다. 하나라도 통과하지 못하면 검사가 실패하고 병합할 수 없습니다.\n\n## 1. 기록 검사 (PR 본문)\n| 항목 | 통과 기준 |\n|---|---|\n| 필수 항목 | 변경 내용 (요약) · 변경 이유 · 목적 · 변경 유형 · 테스트 내용 · 위험도와 되돌리는 방법이 비어 있지 않음 |\n| 개발자 이해 확인 | AI 사용 시 3문항(핵심 로직 · 우려되는 문제점 · 고른 이유)에 모두 답이 있음. 단 /hdel-ai-coding:병합긴급 PR(제목 [긴급])은 병합 뒤 작성으로 통과 |\n| 위험 신호 설명 | 아래 위험 신호가 탐지되면 \"확인 필요 항목 설명\"에 이유가 있음 (\"없음\" · 빈칸이면 실패) |\n\n## 2. 위험 신호\n| 항목 | 탐지 기준 | 왜 보나 |\n|---|---|---|\n| 테스트 파일 삭제 | 테스트 폴더 아래 파일이나 테스트 파일 삭제 (TEST_DIRS · TEST_FILE) | 삭제된 테스트가 검증하던 동작을 다른 곳에서 확인하는지 |\n| 테스트 건너뛰기 추가 | 테스트 파일의 추가된 줄에 건너뛰기 표시 (SKIP_MARK) | 실패하는 테스트를 끄고 통과시킨 것일 수 있음 |\n| CI · 검사 설정 변경 | .github/workflows/ 변경 | 검사 기준이 약해지지 않았는지 |\n| 외부 패키지 추가 | 패키지 목록 파일에 새 패키지 줄 (PKG_FILE · PKG_LINE) | 실제로 있는 패키지인지(AI가 없는 이름을 만들기도 함), 꼭 필요한지 |\n| 변경 규모 과다 | 파일 10개 초과 또는 변경 500줄 초과 | 나눠서 병합할 수 있는지 |\n\n## 3. 비밀정보 · 테스트\n| 항목 | 도구 |\n|---|---|\n| 비밀정보 | gitleaks (오픈소스) |\n| 테스트 | 테스트 명령(TEST_CMD) 전체 통과 |\n\n## 4. 언어별 기본값 (검사 파일 맨 위 env)\n프로젝트마다 언어 · 폴더 구조가 달라 탐지 규칙을 설정값으로 둡니다. /hdel-ai-coding:신규적용 가 저장소 언어를 보고 고릅니다.\n\n| 언어 | LANG_SETUP | TEST_CMD | TEST_DIRS | TEST_FILE | SKIP_MARK | PKG_FILE | PKG_LINE |\n|---|---|---|---|---|---|---|---|\n| Dart · Flutter | dart | dart pub get && dart test | test/ | _test.dart | skip: | pubspec.yaml | `^\\s{2}[a-z_]+:\\s*\\^?[\\d.]` |\n| Python | python | pip install -r requirements.txt && pytest | tests/ test/ | test_ | pytest.mark.skip | requirements.txt | `^[A-Za-z0-9_.-]+` |\n| JavaScript · TypeScript | node | npm ci && npm test | `__tests__/` test/ | .test. | .skip( | package.json | `^\\s+\"[@a-z0-9/._-]+\":\\s*\"` |\n\n폴더 구조가 다르면 TEST_DIRS 만 바꾸면 됩니다 (예: src/test/ · app/tests/).\n\n탐지는 파일 경로와 추가된 줄의 패턴으로 판단하는 최소 규칙입니다. 탐지되지 않았다고 안전하다는 뜻은 아니므로, 개발자는 이해 확인 3문항으로 스스로 점검합니다.\n"
+ },
+ "tags": [
+  "v0.1.0"
+ ],
+ "rule_sets": [
+  {
+   "version": "v1",
+   "name": "문서 기반",
+   "src": "plugin/rules/",
+   "files": [
+    ".claude/settings.json",
+    ".github/pull_request_template.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "docs/AI_코딩_사용지침.md",
+    "docs/HANDOVER.md",
+    "docs/HISTORY.md"
+   ]
+  },
+  {
+   "version": "v2",
+   "name": "사이트 기반 (자동 검사 추가)",
+   "src": "rules-site/",
+   "files": [
+    ".github/workflows/governance-check.yml",
+    "docs/확인필요항목_기준.md"
+   ]
+  }
+ ]
+}
