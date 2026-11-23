@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>hdel ai-coding plugin 사용 가이드</title>
+<style>
+/* 색 · 모양은 시연 문서와 같은 값 */
+:root{--paper:#fff;--ink:#17202a;--text:#2a3440;--muted:#5b6672;--line:#d8dde3;--soft:#f4f6f8;--rec:#2c6e49;--recs:#e2f0e7;--warn:#9a5b00;--navy:#17202a;--cream:#faf8f3;--clay:#d97757;
+--sans:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html{background:#eef0f3;scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:17px/1.7 var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 80px}
+header{background:var(--navy);color:#fff;margin:0 -16px 0;padding:44px 32px 30px}
+header small{font:14px var(--mono);color:#7fd1a1}
+header h1{font-size:34px;line-height:1.3;margin:8px 0 10px}
+header p{margin:0;color:#cfd8e1;max-width:38em}
+nav{background:var(--navy);margin:0 -16px 30px;padding:0 32px 22px;display:flex;flex-wrap:wrap;gap:8px}
+nav a{color:#e9edf2;text-decoration:none;border:1px solid #3a4756;border-radius:20px;padding:3px 14px;font-size:15px}
+nav a b{font-family:var(--mono);color:#7fd1a1;margin-right:6px}
+h2{font-size:25px;margin:50px 0 6px;scroll-margin-top:16px}
+h2 small{display:block;font:700 14px var(--mono);color:var(--rec);margin-bottom:2px}
+.lead{color:var(--muted);margin:0 0 18px}
+code{font:700 .93em var(--mono);background:var(--navy);color:#fff;border-radius:5px;padding:.1em .45em;white-space:nowrap}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:20px 22px}
+.box p{margin:6px 0 0;color:var(--text)}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.box>b{display:block;font-size:18.5px;line-height:1.45}
+.pb small{display:block;font-size:13.5px;font-weight:700;color:#b42318;margin-bottom:2px}
+.pb .so{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.pb .so small{color:var(--rec)}
+.note{margin:14px 0 0;background:var(--recs);border-radius:8px;padding:12px 18px;color:#1d4a31;font-weight:600}
+.note.gray{background:var(--soft);color:var(--text);font-weight:500;font-size:16px}
+
+/* 한눈에 */
+.road{display:grid;grid-template-columns:1fr auto 1fr auto 1.6fr;gap:12px;align-items:stretch}
+.road .ar{align-self:center;font-size:24px;color:#9aa4b0}
+.road .box small{font-size:13.5px;font-weight:700;color:var(--rec)}
+.road .box b{font-size:19px;margin:2px 0}
+.road .loop{border:2px solid #b6bfca}
+
+/* 설치 */
+.cmd{background:var(--navy);color:#fff;border-radius:8px;padding:12px 16px;font:15px/1.7 var(--mono);margin:8px 0 0;overflow-x:auto;white-space:pre}
+.cmd i{font-style:normal;color:#7fd1a1}
+ol.plain{margin:8px 0 0;padding-left:1.3em}
+ol.plain li{margin:4px 0}
+.need{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.need span{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 12px;font-size:15.5px}
+
+.tag2{display:inline-block;font-size:13.5px;font-weight:700;color:#fff;background:var(--rec);border-radius:5px;padding:1px 10px;margin-bottom:6px}
+.tag2.sup{background:var(--warn)}
+.yes{background:var(--recs);border-radius:6px;padding:8px 12px;color:#1d4a31;font-weight:600}
+table.chk{border:0;font-size:15.5px;margin-top:6px;background:none}
+table.chk td{border-top:1px solid var(--line);padding:7px 0;vertical-align:top}
+table.chk tr:first-child td{border-top:0}
+table.chk td:first-child{width:7.2em;font-weight:700}
+.cmdrow{display:flex;gap:10px;align-items:stretch;margin-top:8px}
+.cmdrow .cmd{flex:1;margin:0}
+.copy{border:1px solid var(--line);background:#fff;border-radius:8px;padding:0 18px;font:700 15px var(--sans);cursor:pointer;color:var(--ink)}
+.copy:hover{border-color:var(--rec);color:var(--rec)}
+@media print{.copy{display:none}}
+/* 단계 */
+.step{display:grid;grid-template-columns:1fr 1.08fr;gap:22px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:22px 24px;margin-top:14px}
+.step .no{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--navy);color:#fff;font:700 16px var(--mono);margin-bottom:8px}
+.step h3{margin:0 0 6px;font-size:21px;line-height:1.4}
+.step p{margin:0 0 8px;color:var(--text)}
+.do{margin:10px 0 0;padding:10px 14px;border-left:4px solid var(--rec);background:var(--recs);border-radius:0 6px 6px 0;font-weight:600;color:#1d4a31}
+.tip{margin:10px 0 0;font-size:15px;color:var(--muted)}
+.tip b{color:var(--warn)}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;font-size:15px}
+.who div{background:var(--soft);border-radius:6px;padding:8px 12px}
+.who b{display:block;font-size:13.5px;color:var(--rec)}
+
+/* 화면 그림 */
+.scr{background:var(--cream);border:1px solid #e6e2d8;border-radius:8px;padding:14px;font-size:15px;line-height:1.55}
+.scr::before{content:"화면에 이렇게 나옵니다";display:block;font-size:12.5px;font-weight:700;color:#8a8475;margin-bottom:8px}
+.me{margin-left:auto;width:fit-content;background:#ece7db;border-radius:12px;padding:6px 14px;font-family:var(--mono);font-weight:700}
+.ai{margin:8px 0}
+.card{border:1.5px solid #d9d4c7;background:#fff;border-radius:10px;padding:10px 12px;margin-top:8px}
+.card b{display:block;margin-bottom:6px}
+.opt{border:1px solid #e6e2d8;border-radius:7px;padding:5px 10px;margin-top:5px;display:flex;gap:8px;align-items:baseline}
+.opt span{color:var(--muted);font-size:13.5px}
+.opt.hit{border:2px solid var(--clay);background:#fdf1ec;font-weight:700;position:relative}
+.opt.hit::after{content:"← 이것을 누릅니다";position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12.5px;font-weight:700;color:#b4491f;background:#fdf1ec;padding-left:6px}
+.type{border:2px solid var(--clay);background:#fdf1ec;border-radius:7px;padding:7px 10px;margin-top:5px}
+.type small{display:block;font-size:12.5px;font-weight:700;color:#b4491f}
+.perm{border:1.5px solid #c9d0d8;background:#fff;border-radius:10px;padding:10px 12px;margin-top:8px}
+.btns{display:flex;gap:8px}
+.btns span{border:1px solid #c9d0d8;border-radius:7px;padding:3px 14px;font-size:14px}
+.btns .hit{border:2px solid var(--clay);background:#fdf1ec;font-weight:700}
+.okmsg{background:var(--recs);border-radius:8px;padding:8px 12px;color:#1d4a31;font-weight:600;margin-top:8px}
+
+table{border-collapse:collapse;width:100%;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:16px}
+th,td{padding:10px 14px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+tr:first-child th{border-top:0;background:var(--soft);font-size:14px;color:var(--muted)}
+td:first-child{font-weight:600;width:36%}
+.words{display:flex;flex-wrap:wrap;gap:8px}
+.words span{background:#fff;border:1px solid var(--line);border-radius:20px;padding:4px 14px;font-size:15.5px}
+.words b{margin-right:6px}
+footer{margin-top:40px;font-size:14px;color:var(--muted)}
+@media(max-width:760px){.step,.g3,.g2,.road,.who{grid-template-columns:1fr}.road .ar{transform:rotate(90deg);justify-self:center}}
+@media print{html{background:#fff}nav{display:none}.step,.box{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <small>hdel ai-coding plugin · 0.9.1 · 사용 가이드</small>
+  <h1>AI로 만든 변경에<br>이유와 이해를 남기는 플러그인</h1>
+  <p>AI 코딩 도구에 설치해서 씁니다. 이 가이드는 Claude Code 를 예로 들고, Gemini CLI 용 확장도 같은 내용으로 있습니다. 기록은 AI가 써 주고, 사람은 "내가 이해했는지"만 직접 답합니다. 개발 부서와 비개발 부서가 같은 방법으로 씁니다.</p>
+</header>
+<nav><a href="#what"><b>1</b>무엇인가요</a><a href="#why"><b>2</b>왜 쓰나요</a><a href="#install"><b>3</b>설치</a><a href="#start"><b>4</b>프로젝트에 적용</a><a href="#use"><b>5</b>평소 사용</a><a href="#more"><b>6</b>가끔 쓰는 것</a><a href="#help"><b>7</b>막혔을 때</a></nav>
+
+<h2 id="what"><small>1</small>무엇인가요</h2>
+<p class="lead">AI 코딩 도구(예: Claude Code)에 명령 다섯 개를 더해 주는 플러그인입니다. 이름은 hdel ai-coding 이고, 명령은 모두 <code>/ai-coding:</code> 로 시작합니다. 평소에는 그중 하나만 씁니다.</p>
+<div class="road">
+  <div class="box"><small>PC마다 한 번</small><b>설치</b><p>명령 두 줄</p></div>
+  <div class="ar">→</div>
+  <div class="box"><small>프로젝트마다 한 번</small><b><code>/ai-coding:시작하기</code></b><p>규칙 문서를 넣음</p></div>
+  <div class="ar">→</div>
+  <div class="box loop"><small>작업할 때마다 ↻</small><b>AI에게 요청 → <code>/ai-coding:올리기</code></b><p>말로 시키고, 끝나면 올리기 하나만 입력</p></div>
+</div>
+
+<h2 id="why"><small>2</small>왜 쓰나요</h2>
+<p class="lead">AI가 코드를 빨리 만들어 주지만, 그대로 반영하면 세 가지가 남지 않습니다.</p>
+<div class="g3">
+  <div class="box pb"><small>이런 일이 생깁니다</small><b>누가 왜 바꿨는지 모릅니다</b><div class="so"><small>이 플러그인을 쓰면</small>변경마다 이유 · 바뀐 점 · 위험도가 기록으로 자동 작성됩니다.</div></div>
+  <div class="box pb"><small>이런 일이 생깁니다</small><b>이해하지 못한 채 반영됩니다</b><div class="so"><small>이 플러그인을 쓰면</small>올리기 전에 "어떻게 확인했나"를 내 말로 답해야 합니다. AI가 대신 채우지 못합니다.</div></div>
+  <div class="box pb"><small>이런 일이 생깁니다</small><b>담당이 바뀌면 처음부터 봅니다</b><div class="so"><small>이 플러그인을 쓰면</small>인수인계 문서가 변경마다 갱신돼, 새 담당이 바로 읽습니다.</div></div>
+</div>
+<p class="note">올릴 때마다 세 가지가 남습니다: 반영 요청(PR) 본문 · 변경 기록 1건 · 갱신된 인수인계 문서.</p>
+
+<h2 id="install"><small>3</small>설치 — PC마다 한 번</h2>
+<p class="lead">이미 설치돼 있을 수 있습니다. 먼저 ①로 확인하고, 안 돼 있을 때만 ②와 ③을 합니다.</p>
+<div class="g2">
+  <div class="box"><span class="tag2">① 먼저 확인 · 10초</span><b>이미 설치됐나요?</b>
+    <p>Claude Code 대화창에 <code>/ai-coding:메뉴</code> 를 입력합니다.</p>
+    <p class="yes">버튼이 나오면 설치된 것입니다. ②와 ③은 건너뛰고 4번으로 갑니다.</p></div>
+  <div class="box"><span class="tag2 sup">② PC 준비 · 지원 담당과 함께</span><b>세 가지가 있어야 합니다</b>
+    <table class="chk">
+      <tr><td>Claude Code</td><td>프로그램이 열리면 됩니다</td></tr>
+      <tr><td>GitHub 로그인</td><td>터미널에 <code>gh auth status</code> → "Logged in" 이 보이면 됩니다</td></tr>
+      <tr><td>Node.js</td><td>터미널에 <code>node -v</code> → v18 이상 숫자가 나오면 됩니다</td></tr>
+    </table>
+    <p>하나라도 안 되면 지원 담당에게 요청합니다. 설치에서 어려운 부분은 여기뿐입니다.</p></div>
+</div>
+<div class="box" style="margin-top:14px"><span class="tag2">③ 설치 · 붙여 넣기 한 번</span><b>아래 두 줄을 한꺼번에 복사해 터미널에 붙여 넣고 Enter</b>
+  <div class="cmdrow"><div class="cmd" id="instcmd">claude plugin marketplace add <i>&lt;저장소 주소&gt;</i>
+claude plugin install ai-coding@hdel</div><button class="copy" type="button" onclick="navigator.clipboard&&navigator.clipboard.writeText(document.getElementById('instcmd').innerText).then(()=>{this.textContent='복사됨';setTimeout(()=>this.textContent='복사',1500)})">복사</button></div>
+  <p><b style="display:inline;font-size:inherit">&lt;저장소 주소&gt;</b> 자리는 개발 리더가 알려 준 주소로 바꿉니다. "Successfully installed" 가 나오면 끝입니다. Claude Code 를 닫았다가 다시 열고 ①을 한 번 더 확인합니다.</p></div>
+<p class="note gray"><b>새 버전 받기</b>: <code>claude plugin marketplace update hdel</code> 다음에 <code>claude plugin update ai-coding@hdel</code></p>
+
+<h2 id="start"><small>4</small>프로젝트에 적용 — 프로젝트마다 한 번</h2>
+<p class="lead">프로젝트 폴더에서 Claude Code 를 열고 한 번만 합니다. 팀에서 누가 이미 했으면 건너뜁니다.</p>
+<div class="step">
+  <div><span class="no">1</span><h3><code>/ai-coding:시작하기</code> 를 입력하고 세 가지를 고릅니다</h3>
+    <p>카드 한 장에서 질문 세 개에 차례로 답합니다. 그러면 규칙 문서와 기록 양식이 프로젝트에 들어갑니다.</p>
+    <div class="do">할 일: 세 가지 고르기 → 요약을 보고 [반영 (추천)] 누르기.</div>
+    <p class="tip"><b>조직</b>이 중요합니다. 개발 부서는 올릴 때 3문항, 비개발 부서는 1문항을 묻게 됩니다.</p></div>
+  <div class="scr"><div class="me">/ai-coding:시작하기</div>
+    <div class="card"><b>① 프로젝트</b><div class="opt">새 프로젝트</div><div class="opt">이미 운영 중</div>
+      <b style="margin-top:10px">② 조직</b><div class="opt">개발 부서</div><div class="opt">비개발 부서</div>
+      <b style="margin-top:10px">③ AI 도구</b><div class="opt">Claude Code만</div><div class="opt">Gemini CLI도 사용</div></div></div>
+</div>
+
+<h2 id="use"><small>5</small>평소 사용 — 올리기</h2>
+<p class="lead">AI에게 말로 시키고, 작업이 끝나면 <code>/ai-coding:올리기</code> 를 입력합니다. 그다음은 화면이 묻는 대로 따라 합니다. 주황색 테두리가 내가 누르거나 쓰는 곳입니다.</p>
+
+<div class="step">
+  <div><span class="no">1</span><h3>대화창에 <code>/ai-coding:올리기</code> 를 입력합니다</h3>
+    <p>AI가 바꾼 내용을 모으고 시험을 돌립니다. 잠시 기다립니다.</p>
+    <div class="do">할 일: 입력하고 Enter. 그다음은 기다리기.</div></div>
+  <div class="scr"><div class="me">/ai-coding:올리기</div><div class="ai">올릴 변경을 모으고 있습니다…</div></div>
+</div>
+
+<div class="step">
+  <div><span class="no">2</span><h3>"작업 공간을 만들까요?" → [지금 하기]</h3>
+    <p>내 작업을 따로 담아 둘 자리(브랜치)를 만드는 것입니다. 작업 내용은 사라지지 않습니다.</p>
+    <div class="do">할 일: [지금 하기 (추천)] 누르기.</div>
+    <p class="tip">이미 작업 공간에서 일하고 있으면 이 질문은 나오지 않습니다.</p></div>
+  <div class="scr"><div class="card"><b>작업 공간(브랜치)을 만들어 옮길까요?</b>
+    <div class="opt hit">지금 하기 (추천)</div><div class="opt">직접 할게요</div></div></div>
+</div>
+
+<div class="step">
+  <div><span class="no">3</span><h3>이해 확인 → 내 말로 답합니다</h3>
+    <p>이것만은 AI가 대신 써 주지 않습니다. <b>직접 해 본 것과 아는 것</b>을 한두 줄로 씁니다.</p>
+    <div class="who"><div><b>비개발 부서 · 1문항</b>어떻게 확인했나</div><div><b>개발 부서 · 3문항</b>어떻게 동작하나 · 우려되는 점 · 왜 이 방식인가</div></div>
+    <div class="do">할 일: 직접 입력 칸에 쓰기. 예) "화면에서 abc 를 넣어 보니 새 안내 글이 나왔고, 올바른 번호를 넣으면 전처럼 나왔어요"</div>
+    <p class="tip"><b>거부되는 답</b>: "확인함"처럼 너무 짧은 답, AI의 설명을 그대로 옮긴 답. 무엇이 바뀌었는지 모르겠으면 [전체 설명]을 눌러 먼저 읽습니다.</p></div>
+  <div class="scr"><div class="card"><b>어떻게 확인했나 — 자기 말로 답해 주세요</b>
+    <div class="opt">이 질문 관련 설명 <span>설명을 다시 봅니다</span></div><div class="opt">전체 설명</div>
+    <div class="type"><small>직접 입력 ← 여기에 씁니다</small>화면에서 abc 를 넣어 보니…</div></div></div>
+</div>
+
+<div class="step">
+  <div><span class="no">4</span><h3>요약을 보고 → [올리고 반영]</h3>
+    <p>AI가 정리한 요약이 나오고, 카드 한 장에서 두 가지를 차례로 묻습니다. 다음 사람이 알아야 할 주의할 점이 없으면 [없음], 그리고 [올리고 반영]을 누릅니다.</p>
+    <div class="do">할 일: [없음] 누르고, [올리고 반영 (추천)] 누르기.</div>
+    <p class="tip">요약이 내가 한 일과 다르면 [고칠 곳 있음]을 누르고 무엇이 다른지 씁니다.</p></div>
+  <div class="scr"><div class="ai">올릴 내용 요약입니다. 제목 · 바뀐 점 3줄 · 내가 쓴 답</div>
+    <div class="card"><b>① 주의할 점이 있나요? (선택)</b><div class="opt hit">없음</div><div class="opt">이해 확인 답으로 충분</div><div class="opt">직접 입력 <span>있으면 씁니다</span></div>
+      <b style="margin-top:12px">② 이대로 올리고 반영할까요?</b><div class="opt hit">올리고 반영 (추천)</div><div class="opt">고칠 곳 있음</div><div class="opt">지금은 안 올림</div></div></div>
+</div>
+
+<div class="step">
+  <div><span class="no">5</span><h3>허락을 묻는 창이 뜨면 → [허용]</h3>
+    <p>팀 저장소에 올리기 직전에, 컴퓨터가 "이 명령을 실행해도 될까요?"라고 한 번 묻습니다. 사람이 마지막으로 확인하는 자리입니다.</p>
+    <div class="do">할 일: [허용] 누르기.</div></div>
+  <div class="scr"><div class="perm"><b style="display:block;margin-bottom:6px">이 명령을 실행할까요?</b><div style="font:13px var(--mono);color:#5b6672;margin-bottom:8px">hdel pr create … --merge</div><div class="btns"><span class="hit">허용</span><span>거부</span></div></div></div>
+</div>
+
+<div class="step">
+  <div><span class="no">6</span><h3>"반영됐습니다"가 나오면 끝</h3>
+    <p>변경과 기록이 팀 저장소에 들어갔습니다. 누가 왜 바꿨는지, 내가 어떻게 확인했는지가 함께 남습니다.</p>
+    <div class="do">할 일: 없음. 다음 작업은 새 대화에서 시작합니다.</div></div>
+  <div class="scr"><div class="okmsg">반영 요청(PR) #12 가 반영됐습니다.</div><div class="ai">다음 작업은 새 대화에서 시작하면 토큰이 덜 듭니다.</div></div>
+</div>
+
+<h2 id="more"><small>6</small>가끔 쓰는 것</h2>
+<p class="lead">명령은 모두 <code>/ai-coding:</code> 로 시작합니다. 명령만 치면 버튼이 나오니 뒤에 붙는 말은 외우지 않아도 됩니다.</p>
+<table>
+<tr><th>이럴 때</th><th>입력</th><th>그러면</th></tr>
+<tr><td>AI가 뭘 바꿨는지 모르겠다</td><td><code>/ai-coding:파악하기</code> → [내 작업]</td><td>바뀐 내용을 쉬운 말로 설명합니다. 올리기 전에 읽어 두면 이해 확인이 쉬워집니다.</td></tr>
+<tr><td>처음 맡은 프로젝트를 알고 싶다</td><td><code>/ai-coding:파악하기</code> → [프로젝트 전체] · [흐름도]</td><td>인수인계 요약과 최근 변경 기록, 구조 그림을 보여 줍니다.</td></tr>
+<tr><td>구조 문서와 흐름도를 만들고 싶다</td><td><code>/ai-coding:분석하기</code></td><td>코드를 읽어 문서를 만듭니다. 시간이 걸리고 토큰이 많이 드는 선택 기능입니다. 주로 개발자가 씁니다.</td></tr>
+<tr><td>급해서 먼저 반영해야 한다</td><td><code>/ai-coding:메뉴</code> → [긴급 올리기]</td><td>먼저 반영하고, 이해 확인은 바로 뒤에 받습니다.</td></tr>
+<tr><td>뭘 쳐야 할지 모르겠다</td><td><code>/ai-coding:메뉴</code></td><td>할 수 있는 일이 버튼으로 나오고, 상황에 맞는 것을 추천합니다.</td></tr>
+</table>
+
+<h2 id="help"><small>7</small>막혔을 때</h2>
+<table>
+<tr><th>화면에 나오는 말</th><th>이렇게 합니다</th></tr>
+<tr><td>답이 너무 짧습니다 / 설명을 그대로 옮긴 답은 거부됩니다</td><td>이해 확인으로 돌아가 내가 직접 해 본 것을 내 말로 다시 씁니다.</td></tr>
+<tr><td>코드에서는 ○○인데 답은 △△입니다. 맞나요?</td><td>AI가 내 답과 실제 동작이 다르다고 본 것입니다. 맞으면 [그대로 둠], 헷갈리면 [이 질문 관련 설명]을 읽고 다시 씁니다.</td></tr>
+<tr><td>로그인이 필요합니다</td><td>본인 계정이라 직접 해야 합니다. 방법을 모르면 지원 담당에게 요청합니다.</td></tr>
+<tr><td>처음 설정(시작하기)이 필요합니다</td><td>이 프로젝트에 아직 적용하지 않은 것입니다. 위 4번을 합니다.</td></tr>
+<tr><td>겹친 수정(충돌)이 있습니다 · 그 밖에 모르는 말</td><td>더 누르지 말고 화면을 그대로 두고 담당 개발자나 지원 담당에게 보여 줍니다.</td></tr>
+</table>
+
+<h2><small>낱말</small>화면에 나오는 말 다섯 개</h2>
+<div class="words"><span><b>반영 요청(PR)</b>내 변경을 팀 저장소에 넣어 달라는 요청</span><span><b>반영(병합)</b>팀 저장소에 실제로 넣는 것</span><span><b>작업 공간(브랜치)</b>내 작업을 따로 담아 두는 자리</span><span><b>저장(커밋)</b>바뀐 내용을 한 번 기록해 두는 것</span><span><b>기준 버전(main)</b>팀이 함께 쓰는 원본</span></div>
+
+<footer>화면 그림은 실제 화면을 단순하게 그린 예시입니다. 버튼 이름은 hdel ai-coding 0.9.1 기준이고, 글의 표현은 상황과 조직에 따라 조금 다를 수 있습니다. 화면이 실제로 어떻게 바뀌는지는 "hdel ai-coding plugin 시연"에서 봅니다.</footer>
+</div>
+</body>
+</html>
